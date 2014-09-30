@@ -1,0 +1,19 @@
+"g++ file.cpp -o exec": compile & link
+"g++ -c file.cpp": compile only to object file
+"g++ file.o -o exec": link to create binary
+
+SOURCE ===compile===> OBJECT ===link===> BINARY (EXECUTABLE)
+
+TYPES
+=====
+
+short (2 bytes): small integer [-32768, +32767]
+int (2 or 4 bytes): integer [−2147483647, +2147483647]
+long (4 bytes): big integer [−2147483647, +2147483647]
+double: real number with decimal part/exponent
+float: real number with decimal part/exponent
+char: character
+string (STL - Standard Template Library)
+
+Prepend "unsigned" to the number type declaration
+to restrict the type to positive numbers.
