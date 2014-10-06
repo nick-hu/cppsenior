@@ -28,4 +28,5 @@ int main() {
     c = b++;
     cout << a << "," << b << "," << c << endl;
 
+    return(0);
 }
