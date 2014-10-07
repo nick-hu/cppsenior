@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int main() {
-
+int main()
+{
     /* "int y": DECLARATION of a
      * "y = 0": INITIALIZATION of a
      * "y < 20": test condition
@@ -28,5 +28,5 @@ int main() {
     c = b++;
     cout << a << "," << b << "," << c << endl;
 
-    return(0);
+    return 0;
 }

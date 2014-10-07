@@ -13,5 +13,5 @@ int main() // function main returns int
 	 * endl flushes the cout buffer (use endl rather than \n) */
 
     cout << "Hello, world!" << endl;
-    return(0);
+    return 0;
 }

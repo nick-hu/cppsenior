@@ -16,5 +16,5 @@ int main()
     getline(cin, mood);
     cout << "Hello, " << name << ". You are feeling " << mood << "." << endl;
 
-    return(0);
+    return 0;
 }

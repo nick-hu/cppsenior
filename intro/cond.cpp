@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int main() {
-
+int main()
+{
     bool b;
     b = true;
 
@@ -14,11 +14,13 @@ int main() {
 
     if (3 == 1+1) {
         cout << "1+1 = 3" << endl;
-    } else if (3 == 1-1) {
+    }
+    else if (3 == 1-1) {
         cout << "1-1 = 3" << endl;
-    } else {
+    }
+    else {
         cout << "Hi" << endl;
     }
 
-    return(0);
+    return 0;
 }

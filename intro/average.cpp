@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int main() {
-
+int main()
+{
     double x, t, n;
     t = 0; n = -1;
 
@@ -18,5 +18,5 @@ int main() {
     else
         cout << "No numbers entered" << endl;
 
-    return(0);
+    return 0;
 }

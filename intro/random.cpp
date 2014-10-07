@@ -4,8 +4,8 @@
 
 using namespace std;
 
-int main() {
-
+int main()
+{
     srand(time(0));
     int randint = rand();
 
@@ -14,5 +14,5 @@ int main() {
     randint = 20 + int((10.0 * rand())/(RAND_MAX+1.0));
     cout << randint << endl;
 
-    return(0);
+    return 0;
 }
