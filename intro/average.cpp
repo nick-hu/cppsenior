@@ -4,8 +4,8 @@ using namespace std;
 
 int main()
 {
-    double x, t, n;
-    t = 0; n = -1;
+    double x, t = 0;
+    int n = -1;
 
     do {
         cout << "Enter a number: ";
