@@ -1,18 +1,20 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 int main()
 {
-    unsigned long a, b, lcm;
+    long a, b, lcm;
 
     cout << "Enter an integer: ";
     cin >> a;
     cout << "Enter an integer: ";
     cin >> b;
 
-    if (a == 0 && b == 0) {
-        cout << "The GCD is 0" << endl;
+    a = abs(a); b = abs(b);
+    if (a == 0 || b == 0) {
+        cout << "The GCD is " << (a > b ? a : b) << endl;
     }
     else {
         lcm = 0;
@@ -21,7 +23,6 @@ int main()
             lcm += a;
         } while (lcm % b != 0);
 
-        cout << lcm << endl;
         cout << "The GCD is " << (a*b)/lcm << endl;
     }
 
