@@ -4,12 +4,12 @@
 
 using namespace std;
 
-double quadratic(double, double, double, complex<double> &, complex<double> &);
+void quadratic(double, double, double, complex<double> &, complex<double> &);
 void complexprint(complex<double>);
 
 int main()
 {
-    double a, b, c, d;
+    double a, b, c;
     complex<double> x1, x2;
 
     cin >> a >> b >> c;
@@ -29,9 +29,9 @@ int main()
     }
 
     else {
-        d = quadratic(a, b, c, x1, x2);
+        quadratic(a, b, c, x1, x2);
 
-        if (d != 0) {
+        if (x1 != x2) {
             cout << "x = ";
             complexprint(x1);
             cout << ", ";
@@ -47,25 +47,23 @@ int main()
     return 0;
 }
 
-double quadratic(double a, double b, double c,
-                 complex<double> &x1, complex<double> &x2)
+void quadratic(double a, double b, double c,
+               complex<double> &x1, complex<double> &x2)
 {
     complex<double> d = pow(b, 2) - 4*a*c;
 
     x1 = (-b + sqrt(d))/(2*a);
     x2 = (-b - sqrt(d))/(2*a);
-
-    return real(d);
 }
 
 void complexprint(complex<double> c)
 {
     double a = real(c), b = imag(c);
-    
+
     if (a != 0 || (a == 0 && b == 0)) {
         cout << a;
     }
-    
+
     if (b != 0) {
         if (b > 0 && a != 0) {
             cout << "+";
