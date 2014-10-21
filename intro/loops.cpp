@@ -26,7 +26,7 @@ int main()
     a = 1;
     b = ++a;
     c = b++;
-    cout << a << "," << b << "," << c << endl;
+    cout << a << "," << b << "," << c << endl; // 2, 3, 2
 
     return 0;
 }
