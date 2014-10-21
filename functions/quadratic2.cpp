@@ -5,6 +5,7 @@
 using namespace std;
 
 double quadratic(double, double, double, complex<double> &, complex<double> &);
+void complexprint(complex<double>);
 
 int main()
 {
@@ -30,22 +31,24 @@ int main()
     else {
         d = quadratic(a, b, c, x1, x2);
 
-        if (d > 0) {
-            cout << "x = " << real(x1) << ", " << real(x2) << endl;
-        }
-        else if (d == 0) {
-            cout << "x = " << real(x1) << endl;
+        if (d != 0) {
+            cout << "x = ";
+            complexprint(x1);
+            cout << ", ";
+            complexprint(x2);
         }
         else {
-            cout << "x = " << real(x1) << " + " << imag(x1) << "i, ";
-            cout << real(x2) << " + " << imag(x2) << "i" << endl;
+            cout << "x = ";
+            complexprint(x1);
         }
+        cout << endl;
     }
 
     return 0;
 }
 
-double quadratic(double a, double b, double c, complex<double> &x1, complex<double> &x2)
+double quadratic(double a, double b, double c,
+                 complex<double> &x1, complex<double> &x2)
 {
     complex<double> d = pow(b, 2) - 4*a*c;
 
@@ -53,4 +56,28 @@ double quadratic(double a, double b, double c, complex<double> &x1, complex<doub
     x2 = (-b - sqrt(d))/(2*a);
 
     return real(d);
+}
+
+void complexprint(complex<double> c)
+{
+    double a = real(c), b = imag(c);
+    
+    if (a != 0 || (a == 0 && b == 0)) {
+        cout << a;
+    }
+    
+    if (b != 0) {
+        if (b > 0 && a != 0) {
+            cout << "+";
+        }
+        if (b < 0) {
+            cout << "-";
+        }
+        if (abs(b) == 1) {
+            cout << "i";
+        }
+        else {
+            cout << abs(b) << "i";
+        }
+    }
 }
