@@ -8,8 +8,8 @@ int main()
 {
     int z = 1;
 
-    cout << foo(z) << endl;
-    cout << z;
+    cout << foo(z) << endl; // 2
+    cout << z; // 2
 
     return 0;
 }
