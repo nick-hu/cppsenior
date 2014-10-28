@@ -1,0 +1,30 @@
+"int foo(string);": function prototype/header; precedes definition/implementation
+"int": return type
+"foo": function name
+"string": input parameter type
+
+By default, C++ functions create a COPY of their arguments.
+
+We can circumvent this by passing by REFERENCE: prefix an argument's name
+with an ampersand (&) in its function's prototype and definition.
+
+Use the keyword "const" to prevent the variable associated with the reference
+from being modified.
+
+STRING METHODS
+==============
+
+pos: index/position of character
+num: number of characters
+
+.size():                Length of string in characters
+.at(pos):               Character at position
+[pos]:                  Character at position
+.insert():              (Various functions)
+.erase(pos, num):       Erase characters from string
+.replace():             (Various functions)
+.c_str():               Convert string to C string (i.e., character array)
+.find(substr, pos):     Find substring starting from pos
+.rfind(substr):         Find *last* substring
+.substr(pos, num):      Get substring from string
+
