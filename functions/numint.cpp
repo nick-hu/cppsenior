@@ -4,24 +4,31 @@
 using namespace std;
 
 double simpson(double, double, unsigned int=50);
+double f(double);
 
 int main()
 {
-    simpson(0, 1, 100);
+    cout << simpson(1E-8, 1, 1E8) << endl;
 
     return 0;
 }
 
 double simpson(double a, double b, unsigned int n)
 {
-    n = (n / 2) * 2;
-    double dx = (b - a) / n;
+    if (n < 2)
+        return 0;
 
-    for (int i = 1; i <= n - 1; ++i) {
-        cout << i << endl;
+    n = (n / 2) * 2;
+    double dx = (b - a)/n, tot = 0;
+
+    for (unsigned int i = 1; i < n/2; ++i) {
+        tot += 2 * f(a + (2*i)*dx) + 4 * f(a + (2*i+1)*dx);
     }
 
-    cout << dx << endl;
+    return (dx/3) * (f(a) + 4*f(a + dx) + tot + f(b));
+}
 
-    return 0;
+double f(double x)
+{
+    return 1/(sqrt(x));
 }
