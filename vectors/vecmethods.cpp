@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -46,9 +47,15 @@ int main()
     }
     printvec(v); // [ 5 5 ]
 
+    vector <int>::iterator erase_it;
+    erase_it = find(v.begin(), v.end(), 5); // find requires <algorithm>
+    // find returns end when not found
+    v.erase(erase_it);
+    printvec(v); // [ 5 ]
+
     vector <vector<int>> v2;
     v2.push_back(v);
-    cout << v2[0][1] << endl; // 5
+    cout << v2[0][0] << endl; // 5
 
     return 0;
 }
