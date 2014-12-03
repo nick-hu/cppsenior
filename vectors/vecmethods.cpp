@@ -53,7 +53,7 @@ int main()
     v.erase(erase_it);
     printvec(v); // [ 5 ]
 
-    vector <vector<int>> v2;
+    vector < vector<int> > v2;
     v2.push_back(v);
     cout << v2[0][0] << endl; // 5
 
