@@ -3,9 +3,6 @@
 
 using namespace std;
 
-void set_row(vector &, unsigned int, vector);
-void set_column(vector &, unsigned int, vector);
-
 int main()
 {
     vector < vector <int> > v;
@@ -14,6 +11,9 @@ int main()
     v.push_back(temp);
     temp = {5, 6, 7, 8};
     v.push_back(temp);
+
+    vector <int> new_v = {9, 10, 11};
+    set_row(v, 2, new_v);
 
     for (unsigned int y = 0; y < v.size(); ++y) {
         for (unsigned int x = 0; x < v[y].size(); ++x) {
@@ -24,12 +24,3 @@ int main()
     
     return 0;
 }
-
-void set_row(vector &v, unsigned int n, vector v2)
-{
-    v[n] = v2;
-}
-
-void set_column(vector &v, unsigned int n, vector v2)
-{
-    
