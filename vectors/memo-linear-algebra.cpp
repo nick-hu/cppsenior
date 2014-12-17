@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 
 using namespace std;
@@ -7,7 +8,7 @@ using namespace std;
 typedef vector <double> Vector;
 typedef vector <Vector> Matrix;
 
-double Determinant(const Matrix &, unsigned int = 0);
+double Determinant(const Matrix &, map &);
 Matrix Minor(const Matrix &, unsigned int, unsigned int);
 Matrix Replace(Matrix, unsigned int, const Vector);
 Vector Solve(const Matrix &, const Vector &);
@@ -19,6 +20,8 @@ void print(const Vector &);
 
 int main()
 {
+    map <Matrix, double> DETMAP;
+
     Matrix A;
     getMatrix(A);
     Vector B;
@@ -29,7 +32,7 @@ int main()
     if (X.empty()) {
         bool dependent = true;
         for (unsigned int i = 0; i < A.size(); ++i) {
-            if (Determinant(Replace(A, i, B))) {
+            if (Determinant(Replace(A, i, B)), DETMAP) {
                 dependent = false;
                 break;
             }
@@ -46,20 +49,27 @@ int main()
     return 0;
 }
 
-double Determinant(const Matrix &m, unsigned int i) {
+double Determinant(const Matrix &m, map &detmap) {
     if (m.size() == 2) {
         return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
     }
     else {
-        double det = 0;
-        short sign = 1 - 2*(i % 2);
+        map<Matrix, double>::iterator it = detmap.find(m);
+        if (it != m.end()) {
+            return *it;
+        } 
+        else {
+            double det = 0;
+            short sign = 1;
 
-        for (unsigned int c = 0; c < m.size(); ++c) {
-            det += sign * m[i][c] * Determinant(Minor(m, i, c), i);
-            sign *= -1;
+            for (unsigned int c = 0; c < m.size(); ++c) {
+                det += sign * m[0][c] * Determinant(Minor(m, 0, c), DETMAP);
+                sign *= -1;
+            }
+
+            detmap[m] = det;
+            return det;
         }
-
-        return det;
     }
 }
 
@@ -86,13 +96,13 @@ Matrix Replace(Matrix m, unsigned int column, const Vector v) {
 
 Vector Solve(const Matrix &A, const Vector &B) {
     Vector x;
-    const double detA = Determinant(A);
+    const double detA = Determinant(A, DETMAP);
 
     if (not detA)
         return {};
 
     for (unsigned int i = 0; i < A.size(); ++i)
-        x.push_back(Determinant(Replace(A, i, B))/detA);
+        x.push_back(Determinant(Replace(A, i, B), DETMAP)/detA);
     return x;
 }
 

@@ -14,4 +14,4 @@ oop: Object-oriented programming (structs, classes, etc.)
 
 tests: C++ programming tests :O
 
-vectors: Vector class and its methods; applications of vectors
+vectors: Vector class and its methods; applications of vectors; *linear algebra assignment*

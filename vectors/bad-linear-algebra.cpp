@@ -7,22 +7,20 @@ using namespace std;
 typedef vector <double> Vector;
 typedef vector <Vector> Matrix;
 
-double Determinant(const Matrix &, unsigned int = 0);
-Matrix Minor(const Matrix &, unsigned int, unsigned int);
+double Determinant(const Matrix , unsigned int = 0);
+Matrix Minor(const Matrix , unsigned int, unsigned int);
 Matrix Replace(Matrix, unsigned int, const Vector);
-Vector Solve(const Matrix &, const Vector &);
+Vector Solve(const Matrix , const Vector );
 
-void getMatrix(Matrix &);
-void getVector(Vector &, unsigned int);
-void print(const Matrix &);
-void print(const Vector &);
+Matrix storeMatrix();
+Vector storeVector(unsigned int);
+void print(const Matrix);
+void print(const Vector);
 
 int main()
 {
-    Matrix A;
-    getMatrix(A);
-    Vector B;
-    getVector(B, A.size());
+    Matrix A = storeMatrix();
+    Vector B = storeVector(A.size());
     
     Vector X = Solve(A, B);
     cout << endl;
@@ -46,7 +44,7 @@ int main()
     return 0;
 }
 
-double Determinant(const Matrix &m, unsigned int i) {
+double Determinant(const Matrix m, unsigned int i) {
     if (m.size() == 2) {
         return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
     }
@@ -63,7 +61,7 @@ double Determinant(const Matrix &m, unsigned int i) {
     }
 }
 
-Matrix Minor(const Matrix &m, unsigned int row, unsigned int column) {
+Matrix Minor(const Matrix m, unsigned int row, unsigned int column) {
     Matrix minm = {};
     
     for (unsigned int r = 0; r < m.size(); ++r) {
@@ -84,7 +82,7 @@ Matrix Replace(Matrix m, unsigned int column, const Vector v) {
     return m;
 }
 
-Vector Solve(const Matrix &A, const Vector &B) {
+Vector Solve(const Matrix A, const Vector B) {
     Vector x;
     const double detA = Determinant(A);
 
@@ -96,8 +94,9 @@ Vector Solve(const Matrix &A, const Vector &B) {
     return x;
 }
 
-void getMatrix(Matrix &m)
+Matrix storeMatrix()
 {
+    Matrix m;
     string row;
     string::size_type s;
 
@@ -111,19 +110,22 @@ void getMatrix(Matrix &m)
             m.back().push_back(stof(row, &s));
             row = row.substr(s);
         } while (not row.empty());
-    } 
+    }
+    return m; 
 }
 
-void getVector(Vector &v, unsigned int n)
+Vector storeVector(unsigned int n)
 {
+    Vector v;
     double d;
     for (unsigned int _ = 0; _ < n; ++_) {
         cin >> d;
         v.push_back(d);
     }
+    return v;
 }
 
-void print(const Matrix &m)
+void print(const Matrix m)
 {
     for (auto r : m) {
         cout << "[\t";
@@ -134,7 +136,7 @@ void print(const Matrix &m)
     }
 }
 
-void print(const Vector &v)
+void print(const Vector v)
 {
     for (auto i : v)
         cout << "[\t" << i << "\t]" << endl;
