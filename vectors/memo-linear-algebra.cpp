@@ -7,11 +7,12 @@ using namespace std;
 
 typedef vector <double> Vector;
 typedef vector <Vector> Matrix;
+typedef map <Matrix, double> MDMap;
 
-double Determinant(const Matrix &, map &);
+double Determinant(const Matrix &, MDMap &);
 Matrix Minor(const Matrix &, unsigned int, unsigned int);
 Matrix Replace(Matrix, unsigned int, const Vector);
-Vector Solve(const Matrix &, const Vector &);
+Vector Solve(const Matrix &, const Vector &, MDMap &);
 
 void getMatrix(Matrix &);
 void getVector(Vector &, unsigned int);
@@ -20,19 +21,19 @@ void print(const Vector &);
 
 int main()
 {
-    map <Matrix, double> DETMAP;
+    MDMap DETMAP;
 
     Matrix A;
     getMatrix(A);
     Vector B;
     getVector(B, A.size());
     
-    Vector X = Solve(A, B);
+    Vector X = Solve(A, B, DETMAP);
     cout << endl;
     if (X.empty()) {
         bool dependent = true;
         for (unsigned int i = 0; i < A.size(); ++i) {
-            if (Determinant(Replace(A, i, B)), DETMAP) {
+            if (Determinant(Replace(A, i, B), DETMAP)) {
                 dependent = false;
                 break;
             }
@@ -49,21 +50,21 @@ int main()
     return 0;
 }
 
-double Determinant(const Matrix &m, map &detmap) {
+double Determinant(const Matrix &m, MDMap &detmap) {
     if (m.size() == 2) {
         return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
     }
     else {
-        map<Matrix, double>::iterator it = detmap.find(m);
-        if (it != m.end()) {
-            return *it;
+        MDMap::iterator it = detmap.find(m);
+        if (it != detmap.end()) {
+            return it->second;
         } 
         else {
             double det = 0;
             short sign = 1;
 
             for (unsigned int c = 0; c < m.size(); ++c) {
-                det += sign * m[0][c] * Determinant(Minor(m, 0, c), DETMAP);
+                det += sign * m[0][c] * Determinant(Minor(m, 0, c), detmap);
                 sign *= -1;
             }
 
@@ -94,15 +95,15 @@ Matrix Replace(Matrix m, unsigned int column, const Vector v) {
     return m;
 }
 
-Vector Solve(const Matrix &A, const Vector &B) {
+Vector Solve(const Matrix &A, const Vector &B, MDMap &detmap) {
     Vector x;
-    const double detA = Determinant(A, DETMAP);
+    const double detA = Determinant(A, detmap);
 
     if (not detA)
         return {};
 
     for (unsigned int i = 0; i < A.size(); ++i)
-        x.push_back(Determinant(Replace(A, i, B), DETMAP)/detA);
+        x.push_back(Determinant(Replace(A, i, B), detmap)/detA);
     return x;
 }
 
