@@ -22,7 +22,7 @@ void print(const Vector &);
 int main()
 {
     MDMap DETMAP;
-	DETMAP[{{}}] = 0;
+    DETMAP[{{}}] = 0;
 
     Matrix A;
     getMatrix(A);
@@ -48,8 +48,8 @@ int main()
         print(X);
     }
 
-	cout << endl << DETMAP.size() - 1 << " matrices memoized :)" << endl;
-	cout << DETMAP[{{}}] << " determinant calculations saved :D" << endl;
+    cout << endl << DETMAP.size() - 1 << " matrices memoized :)" << endl;
+    cout << DETMAP[{{}}] << " determinant calculations saved :D" << endl;
 
     return 0;
 }
@@ -61,7 +61,7 @@ double Determinant(const Matrix &m, MDMap &detmap) {
     else {
         MDMap::iterator it = detmap.find(m);
         if (it != detmap.end()) {
-			detmap[{{}}] += 1;
+            detmap[{{}}] += 1;
             return it->second;
         } 
         else {
