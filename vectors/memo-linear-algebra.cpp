@@ -18,6 +18,7 @@ void getMatrix(Matrix &);
 void getVector(Vector &, unsigned int);
 void print(const Matrix &);
 void print(const Vector &);
+void print(const MDMap &);
 
 int main()
 {
@@ -55,28 +56,26 @@ int main()
 }
 
 double Determinant(const Matrix &m, MDMap &detmap) {
+    double det = 0;
+
+    MDMap::iterator it = detmap.find(m);
+    if (it != detmap.end()) {
+        detmap[{{}}] += 1; // tracks number of memoized matrices
+        return it->second;
+    }
+
     if (m.size() == 2) {
-        return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
+        det = (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
     }
     else {
-        MDMap::iterator it = detmap.find(m);
-        if (it != detmap.end()) {
-            detmap[{{}}] += 1;
-            return it->second;
-        } 
-        else {
-            double det = 0;
-            short sign = 1;
-
-            for (unsigned int c = 0; c < m.size(); ++c) {
-                det += sign * m[0][c] * Determinant(Minor(m, 0, c), detmap);
-                sign *= -1;
-            }
-
-            detmap[m] = det;
-            return det;
+        short sign = 1;
+        for (unsigned int c = 0; c < m.size(); ++c) {
+            det += sign * m[0][c] * Determinant(Minor(m, 0, c), detmap);
+            sign *= -1;
         }
     }
+    detmap[m] = det;
+    return det;
 }
 
 Matrix Minor(const Matrix &m, unsigned int row, unsigned int column) {
@@ -141,9 +140,9 @@ void getVector(Vector &v, unsigned int n)
 
 void print(const Matrix &m)
 {
-    for (auto r : m) {
+    for (const auto &r : m) {
         cout << "[\t";
-        for (auto c : r) {
+        for (const auto &c : r) {
             cout << c << "\t";
         }
         cout << "]" << endl;
@@ -152,6 +151,14 @@ void print(const Matrix &m)
 
 void print(const Vector &v)
 {
-    for (auto i : v)
+    for (const auto &i : v)
         cout << "[\t" << i << "\t]" << endl;
+}
+
+void print(const MDMap &md)
+{
+    for (const auto &kv : md) {
+        print(kv.first);
+        cout << "=> " << kv.second << endl;
+    }
 }
