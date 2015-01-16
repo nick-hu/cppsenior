@@ -7,8 +7,6 @@ int main()
     srand(time(0));
     short size = rand() % 15 + 1;
 
-    cerr << "### Testing " << size << "x" << size << " matrix ###" << endl;
-
     for (unsigned short _ = 0; _ < size; ++_) {
         for (unsigned short i = 0; i < size; ++i) {
             cout << rand() % 9 + 1;
