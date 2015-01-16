@@ -22,16 +22,20 @@ void print(const MDMap &);
 
 int main()
 {
-    MDMap DETMAP;
+    MDMap DETMAP; // Matrix-Determinant map for memoization
     DETMAP[{{}}] = 0;
+    // DETMAP is a special value to count determinant calculations saved.
+    // Global variables are evil, so we pass DETMAP by reference
+    // to Determinant and Solve.
 
     Matrix A;
     getMatrix(A);
     Vector B;
     getVector(B, A.size());
-    
+
     Vector X = Solve(A, B, DETMAP);
     cout << endl;
+    // Checking for infinite/no solutions:
     if (X.empty()) {
         bool dependent = true;
         for (unsigned int i = 0; i < A.size(); ++i) {
@@ -59,8 +63,9 @@ double Determinant(const Matrix &m, MDMap &detmap) {
     double det = 0;
 
     MDMap::iterator it = detmap.find(m);
+    // If matrix in MDMap return memoized determinant
     if (it != detmap.end()) {
-        detmap[{{}}] += 1; // tracks number of memoized matrices
+        detmap[{{}}] += 1; // Tracks number of memoized matrices
         return it->second;
     }
 
@@ -80,7 +85,7 @@ double Determinant(const Matrix &m, MDMap &detmap) {
 
 Matrix Minor(const Matrix &m, unsigned int row, unsigned int column) {
     Matrix minm = {};
-    
+
     for (unsigned int r = 0; r < m.size(); ++r) {
         if (r != row) {
             minm.push_back({});
@@ -126,7 +131,7 @@ void getMatrix(Matrix &m)
             m.back().push_back(stof(row, &s));
             row = row.substr(s);
         } while (not row.empty());
-    } 
+    }
 }
 
 void getVector(Vector &v, unsigned int n)
