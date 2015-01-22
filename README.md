@@ -6,6 +6,8 @@ ICTP12 senior C++ course :~)
 Course contents and topics:
 ---------------------------
 
+fileio: File reading and writing
+
 functions: Functions and string methods
 
 intro: Introduction to C++ (operations, types, i/o, conditionals, control flow)
