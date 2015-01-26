@@ -1,15 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <string>
+#include <cmath>
+#include <sstream>
 #include <algorithm>
 
 using namespace std;
 
 struct Vector {
     Vector();
-    // Vector(string);
     Vector(vector <double> v);
+    Vector(string);
 
     vector <double> vect;
 };
@@ -18,6 +19,16 @@ Vector::Vector() {}
 
 Vector::Vector(vector <double> v) {
     vect = v;
+}
+
+Vector::Vector(string line) {
+    stringstream ss;
+    double d;
+
+    ss << line;
+    while (ss >> d) {
+        vect.push_back(d);
+    }
 }
 
 Vector operator+ (const Vector &a, const Vector &b) {
@@ -60,8 +71,34 @@ Vector operator- (const Vector &a, const Vector &b) {
     return a + -1 * b;
 }
 
-Vector operator[] (const unsigned long i, const Vector &v) {
-    return v.vect[i];
+double operator~ (const Vector &v) {
+    double d = 0;
+
+    for (unsigned int i = 0; i < v.vect.size(); ++i) {
+        d += pow(v.vect[i], 2);
+    }
+
+    return sqrt(d);
+}
+
+bool operator< (const Vector &a, const Vector &b) {
+    return ~a < ~b;
+}
+
+bool operator> (const Vector &a, const Vector &b) {
+    return ~a > ~b;
+}
+
+bool operator== (const Vector &a, const Vector &b) {
+    return a.vect == b.vect;
+}
+
+bool operator<= (const Vector &a, const Vector &b) {
+    return (a < b) || (a == b);
+}
+
+bool operator>= (const Vector &a, const Vector &b) {
+    return (a > b) || (a == b);
 }
 
 ostream& operator<< (ostream &out, const Vector &v) {
@@ -73,14 +110,38 @@ ostream& operator<< (ostream &out, const Vector &v) {
     return out;
 }
 
-
 int main()
 {
-    Vector a ({5, 2});
+    /*
+    Vector a ({3, 4});
     Vector b ({2, -4});
     Vector c = a - b;
+    Vector d ({3, 4});
+
+    cout << (a >= d) << endl;
 
     cout << c << endl;
+    */
+
+    vector <Vector> vects;
+
+    string line, word;
+    ifstream file;
+    stringstream ss;
+    Vector temp;
+    double d;
+
+    file.open("vectext.txt", ios::in);
+    while (getline(file, line)) {
+        temp.vect = {};
+        ss << line;
+        while (ss >> d) {
+            temp.vect.push_back(d);
+        }
+        vects.push_back(temp);
+        cout << temp << endl;
+        ss.clear(); // to receive another line
+    }
 
     return 0;
 }
