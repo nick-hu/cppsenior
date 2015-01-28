@@ -85,6 +85,8 @@ bool operator< (const Vector &a, const Vector &b) {
     return ~a < ~b;
 }
 
+/* Optional comparison operators
+
 bool operator> (const Vector &a, const Vector &b) {
     return ~a > ~b;
 }
@@ -101,6 +103,8 @@ bool operator>= (const Vector &a, const Vector &b) {
     return (a > b) || (a == b);
 }
 
+*/
+
 ostream& operator<< (ostream &out, const Vector &v) {
     out << "[ ";
     for (auto i : v.vect) {
@@ -112,36 +116,20 @@ ostream& operator<< (ostream &out, const Vector &v) {
 
 int main()
 {
-    /*
-    Vector a ({3, 4});
-    Vector b ({2, -4});
-    Vector c = a - b;
-    Vector d ({3, 4});
-
-    cout << (a >= d) << endl;
-
-    cout << c << endl;
-    */
-
     vector <Vector> vects;
 
-    string line, word;
     ifstream file;
-    stringstream ss;
-    Vector temp;
-    double d;
+    string line;
 
     file.open("vectext.txt", ios::in);
     while (getline(file, line)) {
-        temp.vect = {};
-        ss << line;
-        while (ss >> d) {
-            temp.vect.push_back(d);
-        }
-        vects.push_back(temp);
-        cout << temp << endl;
-        ss.clear(); // to receive another line
-    }
+        vects.push_back(Vector(line));
+    }        
+
+    sort(vects.begin(), vects.end());
+
+    for (auto i : vects)
+        cout << i << " " << ~i << endl;
 
     return 0;
 }
