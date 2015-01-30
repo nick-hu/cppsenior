@@ -114,14 +114,15 @@ ostream& operator<< (ostream &out, const Vector &v) {
     return out;
 }
 
-int main()
+int main(int argc, char* argv[])
+// argc: Argument count; argv: cstr of cmd-line args
 {
     vector <Vector> vects;
 
     ifstream file;
     string line;
 
-    file.open("vectext.txt", ios::in);
+    file.open(argv[1], ios::in);
     while (getline(file, line)) {
         vects.push_back(Vector(line));
     }        
