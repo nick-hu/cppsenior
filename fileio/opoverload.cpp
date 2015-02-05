@@ -9,7 +9,7 @@ using namespace std;
 
 struct Vector {
     Vector();
-    Vector(vector <double> v);
+    Vector(vector <double>);
     Vector(string);
 
     vector <double> vect;
