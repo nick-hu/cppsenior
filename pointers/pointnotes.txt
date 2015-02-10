@@ -1,0 +1,16 @@
+=================
+NOTES ON POINTERS
+=================
+
+] int x;        | allocates memory for 'x' (4 bytes in this case)
+] x = 1;        | initializes 'x' to 1 -- can also be done by 'int x(1);' or 'int x = 1;'
+] int* p;       | 'p', a POINTER, stores a memory location (address)
+
+The pointer must be declared as int* because it will refer to the address of an int.
+(The next line will fail otherwise.)
+
+] p = &x;       | 'p' is the ADDRESS OF (&) x
+] cout << x;    | 'x' is inserted into cout stream
+] cout << *p;   | 'p' is DEREFERENCED and x is inserted into cout stream
+
+The AMOUNT of memory read when a pointer is dereferenced is dictated by the POINTER TYPE! 
