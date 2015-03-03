@@ -1,35 +1,32 @@
-#include <iostream>
+#include <stdio.h>
 #include <fstream>
-#include <vector>
-#include <typeinfo>
 
 using namespace std;
 
 int main()
 {
-    char* h = "abcdefg";
-    cout << sizeof(h) << endl;
-    cout << typeid(h).name() << endl;
-    cout << typeid(*h).name() << endl;
-    cout << *h << endl;
-    cout << *(h+1) << endl;
-    printf("%s", h);
-
-/*
-    string line;
-    vector <string> list;
+    char** v = new char* [64];  // New array of strings (64 strings long)
 
     ifstream infile;
     infile.open("fruit.txt", ios::in);
-    while (getline(infile, line)) {
-        list.push_back(line); 
+
+    unsigned short c = 0;
+    while (infile.good()) {
+        v[c] = new char [32];   // New string (32 chars long)
+        infile >> v[c++];       // Extract line (string) from file
     }
+    
     infile.close();
 
-    for (auto l : list) {
-        cout << l << endl;
+    for (unsigned short i = 0; i < c; ++i) {
+        printf("%u %s\n", i, v[i]);
+        delete[] v[i];          // Delete each string (char array)
+        v[i] = 0;               // Set char* to NULL
     }
-    */
+    delete[] v[c-1];            // Remember to delete EOF string!
+    v[c-1] = 0;
+    delete[] v;                 // Delete array of strings
+    v = 0;
 
     return 0;
 }
