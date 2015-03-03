@@ -14,3 +14,32 @@ The pointer must be declared as int* because it will refer to the address of an 
 ] cout << *p;   | 'p' is DEREFERENCED and x is inserted into cout stream
 
 The AMOUNT of memory read when a pointer is dereferenced is dictated by the POINTER TYPE! 
+
+-------------------
+ARRAYS AND POINTERS
+-------------------
+
+An array is a series of elements of the same type placed in contiguous memory
+locations.
+
+] int foo[5];           | declares an int array of size 5 (size must be an int literal)
+] int foo[2] = {1, 2};  | declares an int array and initializes its values
+] int foo[2] {1, 2};    | (equivalent to line above)
+] int foo[] = {1, 2};   | (equivalent to line above -- size is inferred)
+] int foo[] {1, 2};     | (equivalent to line above)
+] foo[0] = 2;           | referencing an array value (index 0)
+
+A (C) string is a null-terminated array of constant characters.
+
+] const char s[] = "Hi";            | declare and initialize a string
+] const char s[] = {'H', 'i', '\0'};| (equivalent to line above)
+
+String literals are interpreted as C strings. 'Arrays' are actually pointers
+to their first element's location, i.e.:
+
+] int foo[] = {1, 2};   |
+
+*foo is 1, but *(foo+1) is 2 (pointer arithmetic -- location is incremented 
+according to the type of the array).
+ 
+] const char* s = "Hi"; | equivalent to 'const char s[] = "Hi";'
