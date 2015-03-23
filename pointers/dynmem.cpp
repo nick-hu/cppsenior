@@ -26,12 +26,13 @@ int main()
     // n is set to the NULL POINTER -- dereferencing n is now a segfault
     // We don't want this to work: 'cout << *n << endl;'
 
-    char ca[27];
+    char ca[9];
 
     // Allocate memory for char array of 32 elements
     // Array is 32 bytes long, since each char is 1 byte
     
-    const char* s = "abcdefghijklmnopqrstuvwxyz123456";
+    // const char* s = "abcdefghijklmnopqrstuvwxyz123456";
+    const char* s = "12345678";
 
     // Equivalent to const char s[]
 
@@ -40,15 +41,16 @@ int main()
 
     // Copy s into ca; leave 1 byte for null char
 
-    strncpy(ca, s, sizeof(ca) - 1);
+    strncpy(ca, s, sizeof(ca));
     cout << ca << endl;
+    printf("%s\n", ca);
 
-    char* cs = new char[32];                        // Allocate memory for char array (i.e. C string)
-    cout << "sizeof(cs): " << sizeof(cs) << endl;
-    strncpy(cs, "Goodbye world", sizeof(cs) - 1);   // String copy; subtract 1 from sizeof since 
-    printf("%s\n", cs);                             // Print with formatting
+    // char* cs = new char[32];                        // Allocate memory for char array (i.e. C string)
+    // cout << "sizeof(cs): " << sizeof(cs) << endl;
+    // strncpy(cs, "Goodbye world", sizeof(cs) - 1);   // String copy; subtract 1 from sizeof since 
+    // printf("%s\n", cs);                             // Print with formatting
     
-    delete[] cs;
+    // delete[] cs;
 
     return 0;
 }

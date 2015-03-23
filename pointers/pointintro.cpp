@@ -26,10 +26,15 @@ int main()
     cout << *cp << endl;
     // ILLEGAL: *cp = 0;
 
-    int* const pc = &b; // Pointer const
+    int* const pc = &b; // Pointer const - asterisk must be BETWEEN keywords!
     *pc = 5;
     cout << *pc << endl;
     // ILLEGAL: pc = &a;
+    
+    int const *cp2 = &a;
+    //*cp2 = 7;
+    cp2 = &b;
+    cout << *cp2 << endl;
 
     return 0;
 }
