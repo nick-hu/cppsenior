@@ -18,29 +18,65 @@ Node::Node(char c, Node* np=0) {
 }
 
 void traverse(Node* node) {
-    cout << node->let << " "; // "node->let" is equivalent to "(*node).let"
-    if (node->next != 0) {
-        traverse(node->next);
+    if (!node) {
+        return; 
     }
+    cout << node->let << " "; // node->let == (*node).let
+    traverse(node->next);
 }
 
-void PushNode(Node* &node, char c) {
-    if (node == 0) {
+void Append(Node* &node, char c) {
+    if (!node) {
         node = new Node(c);
         return;
     }
-    PushNode(node->next, c);
+    Append(node->next, c);
 }
 
-void PopNode(Node* &node) {
+void Prepend(Node* &node, char c) {
+    node = new Node(c, node);
+}
+
+void Eject(Node* &node) {
+    if (!node) {
+        return; // Empty list
+    }
+    if (!(node->next)) {
+        node = (delete node, 0);
+        return;
+    }
+    Eject(node->next);
+}
+
+void Pop(Node* &node) {
+    if (!node) {
+        return; // Empty list
+    }
+    Node* node_after = node->next;
+    delete node;
+    node = node_after;
 }
 
 int main()
 {
     Node* root = 0;
-    PushNode(root, 'b');
-    PushNode(root, 'c');
+
+    Append(root, 'c');
+    Append(root, 'd');
+    Eject(root);
+    Eject(root);
+    Prepend(root, 'b');
+    Prepend(root, 'a');
+
     traverse(root);
+    cout << endl;
+
+    Pop(root);
+    Pop(root);
+
+    traverse(root);
+    cout << endl;
 
     return 0;
 }
+
