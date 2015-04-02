@@ -25,7 +25,24 @@ void traverse(Node* node) {
     traverse(node->next);
 }
 
+unsigned int length(Node* node) {
+    if (!node) {
+        return 0;
+    }
+    return length(node->next) + 1;
+}
+
+void ndelete(Node* &node) {
+    if (!node) {
+        return;
+    }
+    ndelete(node->next);
+    delete node;
+    node = 0;
+}
+
 void Append(Node* &node, char c) {
+    // Pass node by reference in case root node is changed
     if (!node) {
         node = new Node(c);
         return;
@@ -42,7 +59,8 @@ void Eject(Node* &node) {
         return; // Empty list
     }
     if (!(node->next)) {
-        node = (delete node, 0);
+        delete node;
+        node = 0;
         return;
     }
     Eject(node->next);
@@ -57,13 +75,20 @@ void Pop(Node* &node) {
     node = node_after;
 }
 
+void Emplace(Node* &node, char c) {
+    if (!node || (c <= node->let)) {
+        Prepend(node, c);
+        return;
+    }
+    Emplace(node->next, c);
+}
+
 int main()
 {
     Node* root = 0;
 
-    Append(root, 'c');
     Append(root, 'd');
-    Eject(root);
+    Append(root, 'e');
     Eject(root);
     Prepend(root, 'b');
     Prepend(root, 'a');
@@ -72,10 +97,19 @@ int main()
     cout << endl;
 
     Pop(root);
-    Pop(root);
-
+    cout << length(root) << endl;
     traverse(root);
     cout << endl;
+
+    Node* root2 = 0;
+    Emplace(root2, 'y');
+    Emplace(root2, 'x');
+    Emplace(root2, 'z');
+    traverse(root2);
+    cout << endl;
+
+    ndelete(root);
+    ndelete(root2);
 
     return 0;
 }
