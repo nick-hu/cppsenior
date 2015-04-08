@@ -12,13 +12,11 @@ struct Node {
 
 Node::Node() {}
 
-Node::Node(char c, Node* np=0) {
-    let = c;
-    next = np;
-}
+Node::Node(char c, Node* np=0) : let(c), next(np) {}
 
 void traverse(Node* node) {
     if (!node) {
+        cout << endl;
         return; 
     }
     cout << node->let << " "; // node->let == (*node).let
@@ -67,12 +65,11 @@ void Eject(Node* &node) {
 }
 
 void Pop(Node* &node) {
-    if (!node) {
-        return; // Empty list
+    if (node) {
+        Node* node_after = node->next;
+        delete node;
+        node = node_after;
     }
-    Node* node_after = node->next;
-    delete node;
-    node = node_after;
 }
 
 void Emplace(Node* &node, char c) {
@@ -94,19 +91,16 @@ int main()
     Prepend(root, 'a');
 
     traverse(root);
-    cout << endl;
 
     Pop(root);
     cout << length(root) << endl;
     traverse(root);
-    cout << endl;
 
     Node* root2 = 0;
     Emplace(root2, 'y');
     Emplace(root2, 'x');
     Emplace(root2, 'z');
     traverse(root2);
-    cout << endl;
 
     ndelete(root);
     ndelete(root2);
