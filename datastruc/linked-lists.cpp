@@ -31,12 +31,11 @@ unsigned int length(Node* node) {
 }
 
 void ndelete(Node* &node) {
-    if (!node) {
-        return;
+    if (node) {
+        ndelete(node->next);
+        delete node;
+        node = 0;
     }
-    ndelete(node->next);
-    delete node;
-    node = 0;
 }
 
 void Append(Node* &node, char c) {
@@ -53,10 +52,7 @@ void Prepend(Node* &node, char c) {
 }
 
 void Eject(Node* &node) {
-    if (!node) {
-        return; // Empty list
-    }
-    if (!(node->next)) {
+    if (node && !(node->next)) {
         delete node;
         node = 0;
         return;
