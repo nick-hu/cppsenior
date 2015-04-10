@@ -33,8 +33,8 @@ unsigned int length(Node* node) {
 void ndelete(Node* &node) {
     if (node) {
         ndelete(node->next);
-        delete node;
-        node = 0;
+        delete node; // As recursive calls return, the next node is deleted
+        node = 0; // Especially necessary for the case of a single node
     }
 }
 
@@ -44,7 +44,7 @@ void Append(Node* &node, char c) {
         node = new Node(c);
         return;
     }
-    Append(node->next, c);
+    Append(node->next, c); // Seek the end of the list
 }
 
 void Prepend(Node* &node, char c) {
@@ -69,7 +69,8 @@ void Pop(Node* &node) {
 }
 
 void Emplace(Node* &node, char c) {
-    if (!node || (c <= node->let)) {
+    if (!node || (c <= node->let)) { 
+        // Short-circuit evaluation of OR prevents nullptr dereferencing
         Prepend(node, c);
         return;
     }
