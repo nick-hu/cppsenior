@@ -39,24 +39,62 @@ void in_traverse(Node* node) {
     }
 }
 
-void ndelete(Node* node)
-
-void Emplace(Node* &node, char c) {
+void level_traverse(Node* node, bool descend=true) {
+    /*
+    if (node) {
+        if (!descend) {
+            cout << node->num << " ";
+        }
+        if (descend) {
+            level_traverse(node->left, false);
+            level_traverse(node->right, false);
+            level_traverse(node->left);
+            level_traverse(node->right);
+        }
+    }
+    */
 }
+
+void ndelete(Node* &node) {
+    if (node->left) {
+        ndelete(node->left);
+    }
+    if (node->right) {
+        ndelete(node->right);
+    }
+    delete node;
+    node = 0;
+}
+
+void Emplace(Node* &node, short n) {
+    if (n <= node->num) {
+        if (!node->left) {
+            node->left = new Node(n);
+            return;
+        }
+        Emplace(node->left, n);
+    }
+    else {
+        if (!node->right) {
+            node->right = new Node(n);
+            return;
+        }
+        Emplace(node->right, n);
+    }
+}
+
 
 int main()
 {
-    Node* root = 0;
-    root = new Node(6);
-    root->left = new Node(2);
-    root->right = new Node(7);
-    root->left->left = new Node(1);
-    root->left->right = new Node(4);
-    root->left->right->left = new Node(3);
-    root->left->right->right = new Node(5);
-    root->right = new Node(7);
-    root->right->right = new Node(9);
-    root->right->right->left = new Node(8);
+    Node* root = new Node(6);
+    Emplace(root, 2);
+    Emplace(root, 7);
+    Emplace(root, 1);
+    Emplace(root, 4);
+    Emplace(root, 3);
+    Emplace(root, 5);
+    Emplace(root, 9);
+    Emplace(root, 8);
 
     pre_traverse(root);
     cout << endl;
@@ -66,6 +104,11 @@ int main()
 
     in_traverse(root);
     cout << endl;
+
+    level_traverse(root);
+    cout << endl;
+
+    ndelete(root);
 
     return 0;
 }
