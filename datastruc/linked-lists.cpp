@@ -52,7 +52,10 @@ void Prepend(Node* &node, char c) {
 }
 
 void Eject(Node* &node) {
-    if (node && !(node->next)) {
+    if (!node) {
+        return;
+    }
+    if (!(node->next)) {
         delete node;
         node = 0;
         return;
@@ -83,6 +86,8 @@ int main()
 
     Append(root, 'd');
     Append(root, 'e');
+    Eject(root);
+    Eject(root);
     Eject(root);
     Prepend(root, 'b');
     Prepend(root, 'a');

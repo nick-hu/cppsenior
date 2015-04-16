@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -39,20 +40,19 @@ void in_traverse(Node* node) {
     }
 }
 
-void level_traverse(Node* node, bool descend=true) {
-    /*
-    if (node) {
-        if (!descend) {
-            cout << node->num << " ";
+void level_traverse(Node* node) {
+    queue<Node*> Q;
+    Q.push(node);
+
+    while (!Q.empty()) {
+        Node* n = Q.front();
+        if (n) {
+            cout << n->num << " ";
+            Q.push(n->left);
+            Q.push(n->right);
         }
-        if (descend) {
-            level_traverse(node->left, false);
-            level_traverse(node->right, false);
-            level_traverse(node->left);
-            level_traverse(node->right);
-        }
+        Q.pop();
     }
-    */
 }
 
 void ndelete(Node* &node) {
@@ -82,7 +82,6 @@ void Emplace(Node* &node, short n) {
         Emplace(node->right, n);
     }
 }
-
 
 int main()
 {
