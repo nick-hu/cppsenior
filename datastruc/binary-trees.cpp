@@ -56,31 +56,21 @@ void level_traverse(Node* node) {
 }
 
 void ndelete(Node* &node) {
-    if (node->left) {
+    if (node) {
         ndelete(node->left);
-    }
-    if (node->right) {
         ndelete(node->right);
+        delete node;
+        node = 0;
     }
-    delete node;
-    node = 0;
 }
 
 void Emplace(Node* &node, short n) {
-    if (n <= node->num) {
-        if (!node->left) {
-            node->left = new Node(n);
-            return;
-        }
-        Emplace(node->left, n);
+    Node** next = (n <= node->num) ? &(node->left) : &(node->right);
+    if (!*next) {
+        *next = new Node(n);
+        return;
     }
-    else {
-        if (!node->right) {
-            node->right = new Node(n);
-            return;
-        }
-        Emplace(node->right, n);
-    }
+    Emplace(*next, n);
 }
 
 int main()
