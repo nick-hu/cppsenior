@@ -42,10 +42,11 @@ void in_traverse(Node* node) {
 
 void level_traverse(Node* node) {
     queue<Node*> Q;
+    Node* n;
     Q.push(node);
 
     while (!Q.empty()) {
-        Node* n = Q.front();
+        n = Q.front();
         if (n) {
             cout << n->num << " ";
             Q.push(n->left);
