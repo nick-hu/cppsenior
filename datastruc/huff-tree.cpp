@@ -21,9 +21,9 @@ Node::Node(const char* s, unsigned int f, Node* n=0, Node* l=0, Node* r=0) {
     fill_n(str, 256, '\0');
     strcpy(str, s);
     freq = f;
-    n = next;
-    l = left;
-    r = right;
+    next = n;
+    left = l;
+    right = r;
 }
 
 bool operator< (const Node &a, const Node &b) {
@@ -40,7 +40,7 @@ void traverse_list(Node* node) {
 }
 
 void emplace_list(Node* &node, const char* s, unsigned int f) {
-    if (!node || (f <= node->freq)) { 
+    if (!node || (f <= node->freq)) {
         node = new Node(s, f, node);
         return;
     }
@@ -64,15 +64,12 @@ int main()
     file.close();
 
     emplace_list(root, "hi", 4);
-
     traverse_list(root);
 
     emplace_list(root, "hi", 3);
-
     traverse_list(root);
 
     emplace_list(root, "hi", 7); 
-
     traverse_list(root);
 
     return 0;
