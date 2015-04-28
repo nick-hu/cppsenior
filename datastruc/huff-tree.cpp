@@ -18,8 +18,7 @@ struct Node {
 Node::Node() {}
 
 Node::Node(const char* s, unsigned int f, Node* n=0, Node* l=0, Node* r=0) {
-    fill_n(str, 256, '\0');
-    strcpy(str, s);
+    strncpy(str, s, 256);
     freq = f;
     next = n;
     left = l;
@@ -30,17 +29,38 @@ bool operator< (const Node &a, const Node &b) {
     return a.freq < b.freq;
 }
 
+void repr_print(const char* s) {
+    char c;
+
+    for (short i = 0; i < sizeof(s); ++i) {
+        c = s[i];
+        if (!c) { // Null
+            break;
+        }
+        else if (c < ' ' || c > '~') { // Non-printable character
+            printf("\\%#x", c);
+        }
+        else { // Ordinary, printable character
+            cout << c;
+        }
+    }
+}
+
 void traverse_list(Node* node) {
     if (!node) {
         cout << endl;
         return;
     }
-    cout << "(" << node->str << " " << node->freq << ")";
+
+    cout << "('";
+    repr_print(node->str);
+    cout << "' " << node->freq << ")";
+
     traverse_list(node->next);
 }
 
 void emplace_list(Node* &node, const char* s, unsigned int f) {
-    if (!node || (f <= node->freq)) {
+    if (!node || (f >= node->freq)) {
         node = new Node(s, f, node);
         return;
     }
@@ -58,18 +78,19 @@ int main()
     ifstream file;
 
     file.open("file.txt", ios::in);
-    while (file >> c) {
+    while (file.get(c)) {
         freq[c]++;
     }
     file.close();
 
-    emplace_list(root, "hi", 4);
-    traverse_list(root);
+    char cstring[2] = {'\0', '\0'};
+    for (short i = 0; i < 256; ++i) {
+        if (freq[i]) {
+            cstring[0] = i;
+            emplace_list(root, cstring, freq[i]);
+        }
+    }
 
-    emplace_list(root, "hi", 3);
-    traverse_list(root);
-
-    emplace_list(root, "hi", 7); 
     traverse_list(root);
 
     return 0;
