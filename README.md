@@ -6,7 +6,7 @@ ICTP12 senior C++ course :~)
 Course contents and topics:
 ---------------------------
 
-datastruc: Data structures (linked lists, etc.)
+datastruc: Data structures (linked lists, binary trees); *Huffman coding project*
 
 fileio: File reading and writing
 

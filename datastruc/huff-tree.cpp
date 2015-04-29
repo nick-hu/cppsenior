@@ -54,7 +54,7 @@ void traverse_list(Node* node) {
 
     cout << "('";
     repr_print(node->str);
-    cout << "' " << node->freq << ")";
+    cout << "' " << node->freq << ") ";
 
     traverse_list(node->next);
 }
