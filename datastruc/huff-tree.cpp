@@ -67,6 +67,23 @@ void emplace_list(Node* &node, const char* s, unsigned int f) {
     emplace_list(node->next, s, f);
 }
 
+Node* penultimate(Node* node) {
+    if (!node || !(node->next)) {
+        return 0;
+    }
+    if (!(node->next->next)) {
+        return node;
+    }
+    penultimate(node->next);
+}
+
+void list_to_tree(Node* &node) {
+    Node* pen = penultimate(node);
+    Node* last = pen->next;
+
+    Node* parent = new Node("asdf", pen->freq + last->freq, 0, last, pen);
+}
+
 int main()
 {
     Node* root = 0;
@@ -92,6 +109,8 @@ int main()
     }
 
     traverse_list(root);
+
+    list_to_tree(root);
 
     return 0;
 }
