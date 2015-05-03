@@ -30,18 +30,15 @@ Node::Node(const char* s, unsigned int f, Node* n=0, Node* l=0, Node* r=0) {
 ostream& operator<< (ostream &out, const Node &node) {
     out << "('";
 
-    char c;
+    char c, npc[8];
     for (short i = 0; i < strlen(node.str); ++i) {
         c = node.str[i];
-        if (!c) { // Null
-            break;
+        if (c < ' ' || c > '~') { // Non-printable character
+            sprintf(npc, "\\%#x", c);
+            out << npc;
+            continue;
         }
-        else if (c < ' ' || c > '~') { // Non-printable character
-            printf("\\%#x", c);
-        }
-        else { // Ordinary, printable character
-            cout << c;
-        }
+        out << c;
     }
 
     out << "' " << node.freq << ") ";
