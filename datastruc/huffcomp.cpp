@@ -109,7 +109,7 @@ Node* huffman_parent(Node* &node) {
 }
 
 void huffman_code(Node* const node, vector<bool> code[], vector<bool> bv={}) {
-    if (!node->left) { 
+    if (!node->left) {
         code[(node->str)[0]] = bv;
         return;
     }

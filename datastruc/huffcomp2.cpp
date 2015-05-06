@@ -2,8 +2,7 @@
 #include <fstream>
 #include <string>
 #include <map>
-#include <vector>
-#include <queue>
+#include <deque>
 
 using namespace std;
 
@@ -27,6 +26,19 @@ Node::Node(string s, unsigned int f, Node* n=0, Node* l=0, Node* r=0) {
     left = l;
     right = r;
 }
+
+struct ByteChar {
+    ByteChar();
+
+    union {
+        struct {
+            unsigned b0: 1, b1: 1, b2: 1, b3: 1, b4: 1, b5: 1, b6: 1, b7: 1;
+        };
+        char chr;
+    };
+};
+
+ByteChar::ByteChar() {}
 
 ostream& operator<< (ostream &out, const Node &node) {
     out << "('";
@@ -55,23 +67,22 @@ void print_list(Node* const node) {
 }
 
 void print_tree(Node* const node) {
-    queue<Node*> Q;
+    deque<Node*> Q = {node};
     Node* n;
-    Q.push(node);
 
     while (!Q.empty()) { // Breadth-first printing
         n = Q.front();
         if (n) {
             cout << *n;
-            Q.push(n->left);
-            Q.push(n->right);
+            Q.push_back(n->left);
+            Q.push_back(n->right);
         }
-        Q.pop();
+        Q.pop_front();
     }
     cout << endl;
 }
 
-void print_map(const map<char, vector<bool>> &m) {
+void print_map(const map<char, deque<bool>> &m) {
     for (const auto &kv : m) {
         cout << kv.first << " : ";
         for (const bool &b : kv.second) {
@@ -91,7 +102,7 @@ void emplace_list(Node* &node, Node* child) {
 }
 
 void delete_tree(Node* &node) {
-    if (node) { 
+    if (node) {
         delete_tree(node->left);
         delete_tree(node->right);
         delete node; // Post-order deletion
@@ -119,8 +130,8 @@ Node* huffman_parent(Node* &node) {
     return huffman_parent(node->next); // Traverse list until child nodes
 }
 
-void huffman_code(Node* const node, map<char, vector<bool>> &code, 
-                  vector<bool> bv={}) { // Depth-first preorder traversal
+void huffman_code(Node* const node, map<char, deque<bool>> &code,
+                  deque<bool> bv={}) { // Depth-first preorder traversal
     if (!node->left) { // Equivalent to !node->right since the tree is FULL
         code[(node->str).c_str()[0]] = bv;
         return;
@@ -160,7 +171,7 @@ int main()
 
     print_tree(root);
 
-    map<char, vector<bool>> code;
+    map<char, deque<bool>> code;
     huffman_code(root, code);
 
     print_map(code);
