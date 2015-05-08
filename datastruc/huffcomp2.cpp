@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <deque>
+#include <typeinfo>
 
 using namespace std;
 
@@ -26,19 +27,6 @@ Node::Node(string s, unsigned int f, Node* n=0, Node* l=0, Node* r=0) {
     left = l;
     right = r;
 }
-
-struct ByteChar {
-    ByteChar();
-
-    union {
-        struct {
-            unsigned b0: 1, b1: 1, b2: 1, b3: 1, b4: 1, b5: 1, b6: 1, b7: 1;
-        };
-        char chr;
-    };
-};
-
-ByteChar::ByteChar() {}
 
 ostream& operator<< (ostream &out, const Node &node) {
     out << "('";
@@ -142,6 +130,17 @@ void huffman_code(Node* const node, map<char, deque<bool>> &code,
     huffman_code(node->right, code, bv);
 }
 
+void flush(deque<bool> &buffer, ofstream &file) {
+    char c = 0;
+    deque<bool>::iterator it;
+    for (unsigned short i = 0; i < 8; ++i) {
+        it = buffer.begin();
+        c += (1 << (7-i)) * (*it);
+        buffer.pop_front();
+    }
+    file.put(c);
+}
+
 int main()
 {
     Node* root = 0;
@@ -157,7 +156,7 @@ int main()
         if (c == '\n') continue;
         freq[c]++;
     }
-    file.close();
+    //file.close();
 
     for (short i = 0; i < 256; ++i) { // Construct linked list
         if (freq[i]) {
@@ -176,6 +175,23 @@ int main()
 
     print_map(code);
 
+    deque<bool> buffer;
+    file.clear();
+    file.seekg(0, ios::beg);
+
+    ofstream newfile;
+    newfile.open("newfile.txt", ios::out);
+
+    while (file.get(c)) {
+        if (c == '\n') continue;
+        for (const bool &b : code[c]) {
+            buffer.push_back(b);
+        }
+    }
+    flush(buffer, newfile);
+
+    file.close();
+    newfile.close();
     delete_tree(root);
 
     return 0;
