@@ -3,9 +3,10 @@
 #include <string>
 #include <map>
 #include <deque>
-#include <typeinfo>
 
 using namespace std;
+
+typedef map<char, deque<bool>> CodeTable;
 
 struct Node {
     Node();
@@ -70,8 +71,8 @@ void print_tree(Node* const node) {
     cout << endl;
 }
 
-void print_map(const map<char, deque<bool>> &m) {
-    for (const auto &kv : m) {
+void print_ct(const CodeTable &code) {
+    for (const auto &kv : code) {
         cout << kv.first << " : ";
         for (const bool &b : kv.second) {
             cout << b;
@@ -118,31 +119,47 @@ Node* huffman_parent(Node* &node) {
     return huffman_parent(node->next); // Traverse list until child nodes
 }
 
-void huffman_code(Node* const node, map<char, deque<bool>> &code,
+void huffman_code(Node* const node, CodeTable &code,
                   deque<bool> bv={}) { // Depth-first preorder traversal
     if (!node->left) { // Equivalent to !node->right since the tree is FULL
         code[(node->str).c_str()[0]] = bv;
         return;
     }
     bv.push_back(0);
-    huffman_code(node->left, code, bv);
+    huffman_code(node->left, code, bv); // Append a 0 when moving left
     bv.back() = 1;
-    huffman_code(node->right, code, bv);
+    huffman_code(node->right, code, bv); // Append a 1 when moving right
 }
 
-void flush(deque<bool> &buffer, ofstream &file) {
+void flush_deque(deque<bool> &buffer, ofstream &file, unsigned short bits=8) {
+    if (!bits) {
+        return;
+    }
     char c = 0;
-    deque<bool>::iterator it;
-    for (unsigned short i = 0; i < 8; ++i) {
-        it = buffer.begin();
-        c += (1 << (7-i)) * (*it);
+    for (unsigned short i = 0; i < bits; ++i) {
+        c += (1 << (7-i)) * buffer.front();
         buffer.pop_front();
     }
     file.put(c);
 }
 
-int main()
-{
+void serialize_ct(CodeTable &code, ofstream &file) {
+    deque<bool> buffer; 
+
+    for (const auto &kv : code) {
+        file.put(kv.first); // Character
+        file.put(kv.second.size()); // Length of code
+        for (const bool &b : kv.second) {
+            buffer.push_back(b);
+        }
+        while (buffer.size() >= 8) {
+            flush_deque(buffer, file);
+        }
+        flush_deque(buffer, file, buffer.size());
+    }
+}
+
+int main() {
     Node* root = 0;
 
     unsigned int freq[256];
@@ -153,10 +170,9 @@ int main()
 
     file.open("file.txt", ios::in);
     while (file.get(c)) {
-        if (c == '\n') continue;
+        if (c == '\x0d') continue;
         freq[c]++;
     }
-    //file.close();
 
     for (short i = 0; i < 256; ++i) { // Construct linked list
         if (freq[i]) {
@@ -168,27 +184,36 @@ int main()
         emplace_list(root, huffman_parent(root));
     }
 
-    print_tree(root);
+    // print_tree(root);
 
-    map<char, deque<bool>> code;
+    CodeTable code;
     huffman_code(root, code);
 
-    print_map(code);
+    print_ct(code);
 
     deque<bool> buffer;
     file.clear();
-    file.seekg(0, ios::beg);
+    file.seekg(0, ios::beg); // Reset original file for second reading
 
     ofstream newfile;
-    newfile.open("newfile.txt", ios::out);
+    newfile.open("compfile.txt", ios::out);
+
+    newfile.put(code.size());
+    serialize_ct(code, newfile);
 
     while (file.get(c)) {
-        if (c == '\n') continue;
+        if (c == '\x0d') continue;
         for (const bool &b : code[c]) {
             buffer.push_back(b);
         }
+        while (buffer.size() >= 8) { // Flush as many bytes as possible
+            flush_deque(buffer, newfile);
+        }
     }
-    flush(buffer, newfile);
+    
+    unsigned short remainder = 8 - buffer.size();
+    flush_deque(buffer, newfile, buffer.size());
+    newfile.put(remainder);
 
     file.close();
     newfile.close();
