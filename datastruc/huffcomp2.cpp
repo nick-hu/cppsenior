@@ -6,7 +6,7 @@
 
 using namespace std;
 
-typedef map<char, deque<bool>> CodeTable;
+typedef map<unsigned char, deque<bool>> CodeTable;
 
 struct Node {
     Node();
@@ -35,7 +35,7 @@ ostream& operator<< (ostream &out, const Node &node) {
     char npc[8]; // Char array holds text for non-printable characters
     for (const char &c : node.str) {
         if (c < ' ' || c > '~') { // Non-printable character
-            sprintf(npc, "\\%#x",  c);
+            sprintf(npc, "\\%#x", c);
             out << npc;
             continue;
         }
@@ -135,16 +135,16 @@ void flush_deque(deque<bool> &buffer, ofstream &file, unsigned short bits=8) {
     if (!bits) {
         return;
     }
-    char c = 0;
+    unsigned char c = 0;
     for (unsigned short i = 0; i < bits; ++i) {
         c += (1 << (7-i)) * buffer.front();
         buffer.pop_front();
     }
-    file.put(c);
+    file << c;
 }
 
 void serialize_ct(CodeTable &code, ofstream &file) {
-    deque<bool> buffer; 
+    deque<bool> buffer;
 
     for (const auto &kv : code) {
         file.put(kv.first); // Character
@@ -165,12 +165,11 @@ int main() {
     unsigned int freq[256];
     fill_n(freq, 256, 0);
 
-    char c;
+    unsigned char c;
     ifstream file;
 
     file.open("file.txt", ios::in);
-    while (file.get(c)) {
-        if (c == '\x0d') continue;
+    while (file >> noskipws >> c) {
         freq[c]++;
     }
 
@@ -183,8 +182,6 @@ int main() {
     while (root->next) { // Construct binary tree
         emplace_list(root, huffman_parent(root));
     }
-
-    // print_tree(root);
 
     CodeTable code;
     huffman_code(root, code);
@@ -201,8 +198,7 @@ int main() {
     newfile.put(code.size());
     serialize_ct(code, newfile);
 
-    while (file.get(c)) {
-        if (c == '\x0d') continue;
+    while (file >> noskipws >> c) {
         for (const bool &b : code[c]) {
             buffer.push_back(b);
         }
@@ -210,8 +206,8 @@ int main() {
             flush_deque(buffer, newfile);
         }
     }
-    
-    unsigned short remainder = 8 - buffer.size();
+
+    unsigned short remainder = (8 - buffer.size()) % 8;
     flush_deque(buffer, newfile, buffer.size());
     newfile.put(remainder);
 
