@@ -198,17 +198,21 @@ int main() {
     newfile.put(code.size());
     serialize_ct(code, newfile);
 
+    unsigned short bufsize = 0;
+
     while (file >> noskipws >> c) {
         for (const bool &b : code[c]) {
             buffer.push_back(b);
+            bufsize++;
         }
-        while (buffer.size() >= 8) { // Flush as many bytes as possible
+        while (bufsize >= 8) { // Flush as many bytes as possible
             flush_deque(buffer, newfile);
+            bufsize = bufsize - 8;
         }
     }
 
-    unsigned short remainder = (8 - buffer.size()) % 8;
-    flush_deque(buffer, newfile, buffer.size());
+    unsigned short remainder = (8 - bufsize) % 8;
+    flush_deque(buffer, newfile, bufsize);
     newfile.put(remainder);
 
     file.close();
