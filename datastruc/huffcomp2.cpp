@@ -1,3 +1,10 @@
+/*
+ * ICTP 12 (2-4) Huffman compression
+ * 2015-06-08
+ * Nicholas Hu
+ * Input: file.txt  Output: compfile.txt
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -186,7 +193,7 @@ int main() {
     CodeTable code;
     huffman_code(root, code);
 
-    print_ct(code);
+    // print_ct(code);
 
     deque<bool> buffer;
     file.clear();

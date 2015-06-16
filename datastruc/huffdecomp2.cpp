@@ -1,3 +1,28 @@
+/*
+ * ICTP 12 (2-4) Huffman decompression
+ * 2015-06-08
+ * Nicholas Hu
+ * Input: compfile.txt  Output: decompfile.txt
+ *
+ * Format of compressed file
+ * =========================
+ * [MAP_LENGTH]([CHARACTER][CODE_LENGTH][CODE] ...)[FILE][EXCESS_BITS]
+ * CODE is padded with zeroes if necessary
+ *
+ * Example:
+ *
+ *  char |    code
+ * ======|===========
+ *  'a'  | 1011
+ *  'b'  | 110100101
+ *
+ * Compressed file:
+ *
+ * BIN: 00000010 01100001 00000100 10110000 01100010 00001001 11010010 10000000 [FILE][EXCESS_BITS]
+ * DEC: 2        97       4        176      98       9        210      128      [FILE][EXCESS_BITS]
+ * CHR: STX      a        EOT               b        \t                         [FILE][EXCESS_BITS]
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,7 +36,7 @@ typedef unordered_map<string, char> DecodeTable;
 void byte_to_bitstr(const unsigned char &b, string &str,
                     const unsigned char num_bits=8) {
     for (unsigned char bit = 0; bit < num_bits; ++bit) {
-        str.push_back((((b >> (7 - bit)) & 1) == 0) ? '0' : '1');
+        str.push_back(((b >> (7 - bit)) & 1) ? '1' : '0');
     }
 }
 
@@ -59,8 +84,6 @@ int main() {
         code[charcode] = c;
         charcode.clear();
     }
-
-
 
     unsigned char textbyte;
     string buffer, codestr;
